@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>아라호 관제센터 설치 안내</title>
+<style>
+:root{--bg:#f7f8fc;--fg:#1d2340;--mut:#5b6385;--line:#d9deef;--acc:#e8891a;--blue:#2f6fc9;--card:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1030;--fg:#eef1ff;--mut:#a3adda;--line:#273270;--acc:#ffb13b;--blue:#6fb6ff;--card:#121a46}}
+body{background:var(--bg);color:var(--fg);font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;line-height:1.7;margin:0;padding:24px 16px 60px}
+main{max-width:820px;margin:auto}
+h1{font-size:1.9rem;margin:0 0 4px}.lead{color:var(--mut);margin:0 0 24px}
+h2{font-size:1.25rem;margin:32px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:12px 0}
+.card h3{margin:0 0 6px;font-size:1.05rem}
+ol,ul{padding-left:1.4em}li{margin:4px 0}
+code{background:#8881;border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:.92em;word-break:break-all}
+pre{background:#8881;border:1px solid var(--line);border-radius:10px;padding:10px 14px;overflow-x:auto;font-size:.9em}
+.tag{display:inline-block;background:var(--acc);color:#2a1500;border-radius:999px;padding:0 10px;font-size:.85rem;font-weight:700;margin-right:6px}
+.tag.b{background:var(--blue);color:#fff}
+.warn{border-left:5px solid var(--acc)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}th{background:#8881}
+</style></head><body><main>
+<h1>🚀 아라호 관제센터</h1>
+<p class="lead">중학교 과학 1 Ⅶ-1 「태양계 구성과 태양 활동」 수업·논술형 평가 연습 웹앱 · 설치 안내</p>
+
+<h2>1. 들어 있는 것</h2>
+<table>
+<tr><th>파일·폴더</th><th>하는 일</th></tr>
+<tr><td><code>index.html</code></td><td>앱 전체. 이 파일 하나가 웹사이트예요.</td></tr>
+<tr><td><code>Code.gs</code></td><td>구글 시트에 학생 기록을 저장하고, 교신 게시판과 Gemini AI 피드백을 연결하는 서버 코드</td></tr>
+<tr><td><code>img/</code>, <code>docs/</code></td><td>수업용 사진과 자료실 PDF. <b>index.html과 같은 폴더에 그대로</b> 두어야 해요.</td></tr>
+<tr><td><code>GEM_PROMPT.md</code></td><td>(선택) Gemini에서 '논술 코치' Gem을 따로 만들 때 쓰는 지시문</td></tr>
+</table>
+
+<h2>2. 일단 둘러보기 (1분)</h2>
+<div class="card"><p style="margin:0">압축을 풀고 <code>index.html</code>을 크롬으로 열면 바로 실행돼요. 이 상태에서는 기록이 <b>그 컴퓨터에만</b> 저장되고, 교신 게시판 공유와 AI 피드백은 꺼져 있어요. 센터장 화면 코드는 <code>1234</code>입니다.</p></div>
+
+<h2>3. 학생들과 쓰기 (약 15분)</h2>
+
+<div class="card"><h3><span class="tag">1단계</span>온라인 주소 만들기</h3>
+<p>학생 태블릿에서 열려면 인터넷 주소가 필요해요. 둘 중 하나를 고르세요.</p>
+<ul>
+<li><b>깃허브 페이지(추천)</b> — 깃허브에서 <b>공개(Public)</b> 저장소를 만들고 <b>Add file → Upload files</b>에 이 폴더 <b>안의 파일과 폴더를 모두 끌어다 놓기</b>(araho-solar 폴더 자체가 아니라 내용물을, zip 그대로가 아니라 압축을 푼 것을) → <b>Settings → Pages</b>에서 Branch를 <code>main</code>으로 저장. 1~2분 뒤 <code>아이디.github.io/저장소이름</code> 주소가 생겨요. 나중에 고쳐도 주소가 그대로예요.</li>
+<li><b>넷리파이 드롭</b> — <code>app.netlify.com/drop</code>에 로그인한 뒤 이 폴더를 통째로 끌어다 놓기.</li>
+</ul></div>
+
+<div class="card"><h3><span class="tag">2단계</span>구글 시트 연결 (기록 저장·교신·AI)</h3>
+<ol>
+<li>새 <b>구글 시트</b>를 만들고 메뉴 <b>확장 프로그램 → Apps Script</b>를 열어요.</li>
+<li>편집기 내용을 모두 지우고 <code>Code.gs</code> 파일 내용을 통째로 붙여넣은 뒤 저장해요.</li>
+<li><b>배포 → 새 배포 → 유형: 웹 앱</b>을 고르고, 실행 사용자는 <b>나</b>, 액세스 권한은 <b>모든 사용자</b>로 배포해요. 권한 허용 창이 뜨면 허용해요.</li>
+<li>나온 <b>웹 앱 URL</b>(…/exec로 끝남)을 복사해요.</li>
+<li><code>index.html</code>을 메모장(또는 깃허브의 ✏️ 편집)으로 열어 <b>Ctrl+F</b>로 <code>const API</code>를 찾아 <code>const API = '';</code> 따옴표 안에 붙여넣어요. (화면 꾸미기 코드 아래, 400여 번째 줄에 있어요)</li>
+</ol></div>
+
+<div class="card"><h3><span class="tag">3단계</span>우리 학교 이름 넣기</h3>
+<p><code>index.html</code>의 <code>const API</code> 줄 바로 아래에 있어요.</p>
+<pre>const SCHOOL = '우리';            → 예: '고천'   (관제센터 이름·미션 패치, 두 글자 추천)
+const SCHOOL_FULL = '우리 학교';  → 예: '고천중학교'
+const SCHOOL_EN = 'ARAHO';        → 예: 'GOCHEON' (첫 화면 영문)
+const SCHOOL_STORY = '';          → 첫 화면에 넣을 학교 이야기 (비워 둬도 됨)</pre></div>
+
+<div class="card"><h3><span class="tag b">선택</span>공개수업 참관 모드</h3>
+<p>입장 화면 아래 <b>'🎩 참관 오셨나요? 둘러보기'</b>로 참관 선생님이 <b>둘러보기 전용</b>으로 들어올 수 있어요. 슬라이드를 잠금 없이 넘기고 활동을 해 볼 수 있지만, 시트에도 기기에도 아무것도 저장되지 않아요. 교신 채널은 그 반 학생들의 교신을 이름을 가린 채 보여 줘요.</p>
+<pre>const GUEST_CLS = ['1'];   → 참관할 반. 예: ['3'] / 여러 반 ['1','2'] / 끄기 []</pre></div>
+
+<div class="card warn"><h3><span class="tag">4단계</span>센터장 코드와 AI 키</h3>
+<p>Apps Script 웹 앱을 한 번 열면 시트에 <b>설정</b> 탭이 생겨요.</p>
+<ul>
+<li><b>PIN</b> — 센터장(교사) 화면 입장 코드. 처음 값 <code>1234</code>를 <b>꼭 바꾸세요.</b></li>
+<li><b>GEMINI_KEY</b> — <code>aistudio.google.com</code>에서 무료로 발급한 키를 넣으면 논술 AI 코치가 켜져요. 키는 시트 안에만 있고 학생 기기에는 전달되지 않아요.</li>
+</ul></div>
+
+<div class="card"><h3><span class="tag b">선택</span>학생 명단</h3>
+<p>시트에 아무 탭이나 만들어 첫 줄에 <code>반 | 번호 | 이름</code>을 쓰고 명단을 붙여넣으면, 학생은 반·번호를 고르고 자기 이름을 확인한 뒤 <b>콜사인</b>(첫 입장 때 스스로 정하는 비밀번호)으로 들어와요. 명단이 없으면 반·번호·이름을 직접 입력해서 들어와요.</p></div>
+
+<h2>4. 쓰면서 알아 두실 점</h2>
+<ul>
+<li>학생 기록은 시트의 <b>학생</b>(현재 점수·진도)·<b>기록</b>(모든 글과 AI 피드백) 탭과 문항별 탭에 쌓이고, 앱의 <b>센터장</b> 탭에서 실시간으로 볼 수 있어요.</li>
+<li>MISSION 02 <b>관제팀 분류 회의</b>에서 모둠이 보고하면, 우리 반 다른 모둠들의 분류 결과(1팀·2팀, 기준, 설명)와 "같은 두 무리로 나눈 팀 수"가 바로 아래에 나타나요. 보고 내용은 시트의 교신 탭에 '분류회의' 단계로 저장되고, 교신 채널 화면에는 나오지 않아요.</li>
+<li>학생 이름은 입장 화면과 교신 목록에서 <b>가운데 글자를 가려</b> 보여요(김민준 → 김○준). 서버가 처음부터 가린 이름만 보내므로, 참관 오신 분이나 다른 사람이 화면을 눌러 봐도 전체 이름은 알 수 없어요. 센터장 화면에서만 전체 이름이 보여요.</li>
+<li>교신 채널은 기본으로 <b>자기 반 교신만</b> 보이고, '다른 반 교신 구경하기'를 누르면 이름을 가린 채 읽기만 할 수 있어요.</li>
+<li>내용은 2022 개정 교육과정 [9과07-01]·[9과07-02]와 천재교육 교과서 226~235쪽을 기준으로 맞췄어요. 밀도는 교육과정상 다음 단원(물질의 특성)에서 배우므로 '더 알아보기' 한 장에만 있고 평가에서는 요구하지 않아요.</li>
+<li>센터장으로 들어가서 해 본 활동은 저장되지 않고, 다시 들어가면 처음 상태로 시작해요.</li>
+<li><code>Code.gs</code>를 고친 뒤에는 Apps Script에서 <b>배포 → 배포 관리 → 수정(연필) → 새 버전</b>으로 다시 배포해야 반영돼요. URL은 그대로예요.</li>
+</ul>
+</main></body></html>
